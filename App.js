@@ -81,7 +81,7 @@ function checkPalindromeAllFormats(date) {
         }
     }
 
-    return flag;
+    return [flag,dateFormat];
 }
 
 function isLeapYear(year) {
@@ -249,7 +249,7 @@ checkButton.addEventListener("click", function clickHandler() {
             output.style.display = 'block'
             delayGif.style.display = 'none'
             process(bdayStr)
-        }, 3000)
+        }, 3300)
     }
 
 })
@@ -265,14 +265,11 @@ function process(bdayStr) {
 
     var ifPalindrome = checkPalindromeAllFormats(dateObj);
 
-    if (ifPalindrome) {
-        output.innerText = "Your birthdate is a palindrome!🥳";
+    if (ifPalindrome[0]) {
+        output.innerText = `Your birthdate is a palindrome!🥳🤩🤩 in this format ${ifPalindrome[1]}.`;
     } else {
         var nextDateObj = findPalindromeDate(dateObj);
-        if (nextDateObj.cnt > 1) {
-            output.innerText = `The nearest palindrome date is ${nextDateObj.day}/${nextDateObj.month}/${nextDateObj.year}, you missed it by ${nextDateObj.cnt} days! 🙁`;
-        } else {
-            output.innerText = `The nearest palindrome date is ${nextDateObj.day}/${nextDateObj.month}/${nextDateObj.year}, you missed it by ${nextDateObj.cnt} day! 🙁`;
-        }
+        //(cond)?(true):(false)
+        (nextDateObj.cnt > 1)?(output.innerText = `Your birthdate is not a palindrome. The nearest palindrome date is ${nextDateObj.day}/${nextDateObj.month}/${nextDateObj.year}, you missed it by ${nextDateObj.cnt} days! 🙁`):(output.innerText = `Your birthdate is not a palindrome. The nearest palindrome date is ${nextDateObj.day}/${nextDateObj.month}/${nextDateObj.year}, you missed it by ${nextDateObj.cnt} day! 🙁`)
     }
 }

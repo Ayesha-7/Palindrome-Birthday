@@ -45,11 +45,14 @@ body{
 }
 
 .container p{
-    margin-bottom: 3rem;
+    max-width: 70%;
+    text-align: center;
+    margin: auto;
 }
+
 label {
     font-size: 1.5rem;
-    margin: 0.2rem;
+    margin: 1rem;
     color: var(--color-two);
     font-weight: 900;
 }
@@ -92,6 +95,7 @@ label {
     width: 50%;
     margin: 0.5rem auto;
     padding: 0.7rem;
+    font-weight: bold;
 }
 
 #delay-gif{
