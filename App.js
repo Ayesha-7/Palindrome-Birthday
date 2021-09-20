@@ -266,7 +266,7 @@ function process(bdayStr) {
     var ifPalindrome = checkPalindromeAllFormats(dateObj);
 
     if (ifPalindrome[0]) {
-        output.innerText = `Your birthdate is a palindrome!🥳🤩🤩 in this format ${ifPalindrome[1]}.`;
+        output.innerText = ` Your birthdate is a palindrome!🥳🤩🤩   in this format ~ ${ifPalindrome[1]}.`;
     } else {
         var nextDateObj = findPalindromeDate(dateObj);
         //(cond)?(true):(false)
