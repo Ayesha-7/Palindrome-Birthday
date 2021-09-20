@@ -10,6 +10,7 @@ delayGif.style.display = "none";
 output.style.display = "none";
 privacyMsg.style.display = "block";
 
+const date_formats = ['ddmmyyyy', 'mmddyyyy', 'yyyymmdd', 'ddmmyy', 'mmddyy', 'yymmdd'];
 
 function reverseString(str) {
     // var charArray = str.split('');
@@ -71,8 +72,8 @@ function getDateFormats(date) {
 }
 
 function checkPalindromeAllFormats(date) {
-    var allDateFormats = getDateFormats(date);
-    var flag = false;
+    const allDateFormats = getDateFormats(date);
+    let flag = false;
     for (var i = 0; i < allDateFormats.length; i++) {
         var dateFormat = allDateFormats[i];
         if (isPalindrome(dateFormat)) {
@@ -80,8 +81,7 @@ function checkPalindromeAllFormats(date) {
             break;
         }
     }
-
-    return [flag,dateFormat];
+    return [flag,dateFormat,i];
 }
 
 function isLeapYear(year) {
@@ -170,18 +170,21 @@ function getPreviousDate(date) {
 }
 
 function getNextPalindromeDate(date) {
-    var cnt = 0;
-    var nextDate = getNextDate(date);
-    var result = {
+    let cnt = 0;
+    let nextDate = getNextDate(date);
+    let result = {
         day: '',
         month: '',
         year: '',
-        cnt: ''
+        cnt: '',
+        dateFormat: '',
+        i:0
     };
 
     while (1) {
         cnt++;
-        if (checkPalindromeAllFormats(nextDate)) {
+        var nextArr = checkPalindromeAllFormats(nextDate);
+        if (nextArr[0]) {
             break;
         }
         nextDate = getNextDate(nextDate);
@@ -191,23 +194,28 @@ function getNextPalindromeDate(date) {
     result.month = '' + nextDate.month;
     result.year = '' + nextDate.year;
     result.cnt = '' + cnt;
+    result.dateFormat = nextArr[1];
+    result.i = nextArr[2];
 
     return result;
 }
 
 function getPreviousPalindromeDate(date) {
-    var cnt = 0;
-    var previousDate = getPreviousDate(date);
-    var result = {
+    let c = 0;
+    let previousDate = getPreviousDate(date);
+    let result = {
         day: '',
         month: '',
         year: '',
-        cnt: ''
+        cnt: '',
+        dateFormat: '',
+        i:0
     };
 
     while (1) {
-        cnt++;
-        if (checkPalindromeAllFormats(previousDate)) {
+        c++;
+        var preArr = checkPalindromeAllFormats(previousDate);
+        if (preArr[0]) {
             break;
         }
         previousDate = getPreviousDate(previousDate);
@@ -216,14 +224,16 @@ function getPreviousPalindromeDate(date) {
     result.day = '' + previousDate.day;
     result.month = '' + previousDate.month;
     result.year = '' + previousDate.year;
-    result.cnt = '' + cnt;
+    result.cnt = '' + c;
+    result.dateFormat = preArr[1];
+    result.i = preArr[2];
 
     return result;
 }
 
 function findPalindromeDate(date) {
-    var date_1 = getNextPalindromeDate(date);
-    var date_2 = getPreviousPalindromeDate(date);
+    const date_1 = getNextPalindromeDate(date);
+    const date_2 = getPreviousPalindromeDate(date);
 
     if (Number(date_1.cnt) < Number(date_2.cnt))
         return date_1;
@@ -257,19 +267,20 @@ checkButton.addEventListener("click", function clickHandler() {
 function process(bdayStr) {
     var dateVal = bdayStr.split('-');
 
-    var dateObj = {
+    const dateObj = {
         day: Number(dateVal[2]),
         month: Number(dateVal[1]),
         year: Number(dateVal[0])
     };
 
-    var ifPalindrome = checkPalindromeAllFormats(dateObj);
+    const ifPalindrome = checkPalindromeAllFormats(dateObj);
 
     if (ifPalindrome[0]) {
-        output.innerText = ` Your birthdate is a palindrome!🥳🤩🤩   in this format ~ ${ifPalindrome[1]}.`;
+        output.innerText = ` Your birthdate is a palindrome!🥳🤩🤩and format is
+        ${ifPalindrome[1]} ~ ${date_formats[ifPalindrome[2]]}`;
     } else {
-        var nextDateObj = findPalindromeDate(dateObj);
+        const nextDateObj = findPalindromeDate(dateObj);
         //(cond)?(true):(false)
-        (nextDateObj.cnt > 1)?(output.innerText = `Your birthdate is not a palindrome. The nearest palindrome date is ${nextDateObj.day}/${nextDateObj.month}/${nextDateObj.year}, you missed it by ${nextDateObj.cnt} days! 🙁`):(output.innerText = `Your birthdate is not a palindrome. The nearest palindrome date is ${nextDateObj.day}/${nextDateObj.month}/${nextDateObj.year}, you missed it by ${nextDateObj.cnt} day! 🙁`)
+        (nextDateObj.cnt > 1)?(output.innerText = `Your birthdate is not a palindrome. The nearest palindrome date is ${nextDateObj.day}/${nextDateObj.month}/${nextDateObj.year} in format ${date_formats[nextDateObj.i]}, you missed it by ${nextDateObj.cnt} days! 🙁`):(output.innerText = `Your birthdate is not a palindrome. The nearest palindrome date is ${nextDateObj.day}/${nextDateObj.month}/${nextDateObj.year} in format ${date_formats[nextDateObj.i]}, you missed it by ${nextDateObj.cnt} day! 🙁`)
     }
 }
